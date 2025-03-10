@@ -6,10 +6,9 @@ import { CurrentMenuNewsContextProvider } from "@/context/current-menu-news";
 import { Layout } from "antd";
 
 export default function Home() {
-
   return (
     <Layout style={{
-      height: '100vh'
+      minHeight: '100vh'
     }}>
       <CurrentMenuNewsContextProvider>
         <HeaderComponent />

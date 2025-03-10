@@ -10,7 +10,7 @@ export const ContentComponent = () => {
         return (
             <Content
                 style={{
-                    height: '100%',
+                    minHeight: '100vh',
                     display: 'flex',
                     flexDirection: 'column',
                     padding: '20px',
