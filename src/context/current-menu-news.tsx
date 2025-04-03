@@ -15,7 +15,9 @@ type Props = {
     handleSelectItemId: (id: number) => void
 }
 
-export const CurrentMenuNewsContext = createContext<Props | undefined>(undefined);
+export const CurrentMenuNewsContext = createContext<Props & {
+    selectedId: number
+  } | undefined>(undefined);
 
 export const useCurrentMenuNewsContext = () => {
     const ctx = useContext(CurrentMenuNewsContext);
@@ -30,6 +32,8 @@ export const CurrentMenuNewsContextProvider = ({ children }: { children: ReactNo
         content: []
     }]);
 
+    const [selectedId, setSelectedId] = useState<number>(1);
+
     const [content, setContent] = useState<NewsItem[]|null>(null)
 
     const handleAddMenuItems = (data: Omit<NewsMenuItemType, 'id'>) => {
@@ -41,21 +45,21 @@ export const CurrentMenuNewsContextProvider = ({ children }: { children: ReactNo
     }
 
     const handleSelectItemId = (id: number) => {
-        (id === 1) ? setContent(null) : setContent(menuItems.filter(item => {
-            return item.id === id
-        })[0].content);
-    }
+        setSelectedId(id);
+        if (id === 1) {
+          setContent(null);
+        } else {
+          const selected = menuItems.find(item => item.id === id);
+          if (selected) setContent(selected.content);
+        }
+      };
 
-    const getMenuItems = () => {
-        return menuItems.map(item => {
-            return {
-                key: item.id,
-                label: <p onClick={() => {handleSelectItemId(item.id)}}>
-                    {item.label}
-                </p>
-            }
-        })
-    }
+      const getMenuItems = () => {
+        return menuItems.map(item => ({
+          key: item.id.toString(),
+          label: item.label
+        }));
+      }
 
     return (
         <CurrentMenuNewsContext.Provider value={{
@@ -63,6 +67,7 @@ export const CurrentMenuNewsContextProvider = ({ children }: { children: ReactNo
             handleAddMenuItems,
             getMenuItems,
             handleSelectItemId,
+            selectedId
         }}>
             {children}
         </CurrentMenuNewsContext.Provider>

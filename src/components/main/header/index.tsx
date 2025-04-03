@@ -4,11 +4,16 @@ import { Menu } from "antd";
 import Header from "antd/lib/layout/layout";
 
 export const HeaderComponent = () => {
-    const { getMenuItems } = useCurrentMenuNewsContext()
+  const { getMenuItems, selectedId, handleSelectItemId } = useCurrentMenuNewsContext();
 
-    return (
-        <Header>
-            <Menu mode="horizontal" items={getMenuItems()}></Menu>
-        </Header>
-    )
-}
+  return (
+    <Header>
+      <Menu
+        mode="horizontal"
+        selectedKeys={[selectedId.toString()]}
+        items={getMenuItems()}
+        onClick={(e) => handleSelectItemId(Number(e.key))}
+      />
+    </Header>
+  );
+};
